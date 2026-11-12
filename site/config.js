@@ -6,12 +6,14 @@ export const residences = [
   {
     "id": "hameaux",
     "name": "Les Hameaux 1 à Plagne Villages",
+    "intro": ["Au pied des pistes de Plagne Villages, Les Hameaux 1 permettent de partir et de revenir skis aux pieds. En séjournant au studio, vous bénéficiez d’un accès invité à la piscine intérieure d’Aspen, inclus dans la location.","At Les Hameaux 1 in Plagne Villages, you can ski straight out and back to the residence. Your studio stay includes guest access to Aspen’s indoor pool."],
     "mapsLink": "https://maps.app.goo.gl/qGswyyNZSciVQ7dVA",
     "mapEmbed": "https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d2796.192211568725!2d6.684879999999999!3d45.5062092!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x47897bcb72be9aab%3A0xa7d3c0b85dc4d0da!2sLes%20Hameaux%201!5e0!3m2!1sfr!2sfr!4v1794495969670!5m2!1sfr!2sfr"
   },
   {
     "id": "aspen",
     "name": "Aspen",
+    "intro": ["À quelques mètres des pistes de Plagne Villages, Aspen réunit une piscine intérieure chauffée et un espace bien-être avec sauna et hammam. Un endroit où se détendre après une journée de ski.","A few metres from the slopes in Plagne Villages, Aspen has a heated indoor pool and a wellness area with a sauna and steam room, ideal for unwinding after a day on the slopes."],
     "mapsLink": "https://maps.app.goo.gl/Hpiw6KCjiacws18T6",
     "mapEmbed": "https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d2796.1436410814003!2d6.682249999999999!3d45.50718699999999!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x47897b163dc87e4d%3A0x48281d3ae71b1066!2sLA%20PLAGNE%20STAY!5e0!3m2!1sfr!2sfr!4v1794501666050!5m2!1sfr!2sfr"
   }

@@ -1,4 +1,4 @@
-import { offers, residences, bookingEmail, availabilityUrl } from "./config.js?v=5";
+import { offers, residences, bookingEmail, availabilityUrl } from "./config.js?v=6";
 import { descriptions } from "./descriptions.js?v=4";
 
 const translations = {
@@ -70,7 +70,7 @@ function listOffers() {
       card.append(photo(item.cover, item), el("h3", item.name[lang]), el("p", capacityLabel(item), "muted"), link(tr("Fiche et calendrier", "Details and calendar"), "#" + item.id));
       cards.append(card);
     }
-    section.append(el("h3", residence.name), cards, residenceMap(residence));
+    section.append(el("h3", residence.name), el("p", residence.intro[lang], "residence-intro"), cards, residenceMap(residence));
     byId("offers").append(section);
   }
 }
@@ -208,7 +208,7 @@ function legal() {
     tr("Acompte envisagé de 50 % non remboursable, sous réserve de validation juridique et des exceptions applicables. Le solde est dû un mois avant l’arrivée. Pour une réservation dans ce délai, le règlement est intégral.", "Proposed 50% non-refundable booking deposit, subject to legal review and applicable exceptions. The balance is due one month before arrival. Bookings made within that period are payable in full."),
     tr("Caution à valider 24 h avant l’arrivée : chèque de 500 € et attestation de responsabilité civile villégiature, ou garantie Swikly de 500 € aux Hameaux et pour les deux chambres Aspen, et de 1 000 € pour le studio Aspen et Aspen 3 chambres.", "Validate the security deposit 24 hours before arrival: a €500 cheque with holiday rental liability insurance, or a Swikly guarantee of €500 for Les Hameaux and the two Aspen rooms, and €1,000 for the Aspen studio and Aspen 3-bedroom apartment."),
     tr("Ménage par le locataire ou option de 80 € pour les studios et 200 € pour Aspen 3 chambres. En colocation, restituer les espaces utilisés en bon état de propreté.", "Guests clean the accommodation or can choose an €80 cleaning option for either studio and €200 for Aspen 3-bedroom. Guests in shared accommodation must leave the areas they use clean."),
-    tr("Linge inclus pour les deux chambres en colocation. Pour les studios et Aspen 3 chambres, option de 20 € par personne à demander au moins 48 h avant l’arrivée.", "Linen is included for both rooms in shared accommodation. For the studios and Aspen 3-bedroom, optional linen costs €20 per person and must be requested at least 48 hours before arrival.")
+    tr("Le linge est inclus dans tous les logements Aspen. Aux Hameaux 1, il est proposé en option à 20 € par personne, à demander au moins 48 h avant l’arrivée.", "Linen is included in all Aspen accommodation. At Les Hameaux 1, optional linen costs €20 per person and must be requested at least 48 hours before arrival.")
   ];
   byId("terms").replaceChildren(el("h2", translations.terms[lang]), el("p", draft, "muted"),
     el("h3", tr("Conditions de séjour proposées", "Proposed stay conditions")), ...paragraphs.map(value => el("p", value)));
