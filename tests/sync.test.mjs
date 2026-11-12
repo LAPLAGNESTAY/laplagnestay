@@ -15,7 +15,7 @@ test("rejette les données ambiguës ou invalides", () => {
   assert.throws(() => readCalendar(ical(event.replace("20261114", "20261114T090000Z"))));
   assert.throws(() => readCalendar("<html>"));
 });
-test("isole Hameaux, fusionne Aspen et utilise la date de Paris", () => {
+test("conserve un calendrier distinct pour chaque offre et utilise la date de Paris", () => {
   const payload = snapshot({
     "studio-plagnevillages": [["2026-11-15", "2026-11-16"]],
     "studio-aspen": readCalendar(ical(event)),
@@ -25,8 +25,10 @@ test("isole Hameaux, fusionne Aspen et utilise la date de Paris", () => {
   }, new Date("2026-11-12T23:30:00Z"));
   assert.equal(payload.from, "2026-11-13");
   assert.deepEqual(payload.offers["studio-plagnevillages"], [["2026-11-15", "2026-11-16"]]);
-  for (const id of ["studio-aspen", "appart-aspen", "coloc1-aspen", "coloc2-aspen"]) {
-    assert.deepEqual(payload.offers[id], [["2026-11-13", "2026-11-16"]]);
-  }
+  assert.equal(payload.version, 2);
+  assert.deepEqual(payload.offers["studio-aspen"], [["2026-11-13", "2026-11-14"]]);
+  assert.deepEqual(payload.offers["appart-aspen"], [["2026-11-14", "2026-11-16"]]);
+  assert.deepEqual(payload.offers["coloc1-aspen"], []);
+  assert.deepEqual(payload.offers["coloc2-aspen"], []);
   assert.doesNotMatch(JSON.stringify(payload), /Client|Contact|SUMMARY|DESCRIPTION/);
 });

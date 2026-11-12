@@ -5,32 +5,35 @@
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <meta name="robots" content="noindex, nofollow">
 <meta name="referrer" content="no-referrer">
-<meta http-equiv="Content-Security-Policy" content="default-src 'self'; connect-src 'self' https://raw.githubusercontent.com; base-uri 'none'; object-src 'none'; form-action 'none'">
+<meta http-equiv="Content-Security-Policy" content="default-src 'self'; connect-src 'self' https://raw.githubusercontent.com; img-src 'self' https://a0.muscache.com; base-uri 'none'; object-src 'none'; form-action 'none'">
 <title>La Plagne Stay</title>
-<link rel="stylesheet" href="style.css">
-<script type="module" src="app.js"></script>
+<link rel="stylesheet" href="style.css?v=2">
+<script type="module" src="app.js?v=2"></script>
 </head>
 <body>
 <header class="top shell">
 <a class="brand" href="./">La Plagne <span>Stay</span></a>
-<nav aria-label="Navigation"><a href="#residences" data-t="residences">Résidences</a><button id="language" type="button" lang="en">English</button></nav>
+<nav aria-label="Navigation"><a href="#residences" data-t="residences">Résidences</a><a href="#contact" data-t="contact">Contact</a><button id="language" type="button" lang="en">English</button></nav>
 </header>
 <main>
 <section class="hero"><div class="shell">
 <p class="eyebrow">LA PLAGNE · SAVOIE</p>
 <h1 data-t="hero">Votre séjour<br>à La Plagne</h1>
 <p data-t="intro">Deux résidences. Studios, appartement entier et chambres en colocation.</p>
+<div class="direct-price"><strong data-t="saving">−10 % par rapport au tarif Airbnb</strong><p data-t="comparison">En direct, pour le même logement, les mêmes dates et le même nombre de voyageurs. Tarif confirmé dans le devis.</p></div>
 <a class="primary" href="#residences" data-t="browse">Voir les logements</a>
 </div></section>
 <section id="residences" class="shell section">
 <div class="section-head"><h2 data-t="residences">Résidences</h2>
-<label><span data-t="guests">Voyageurs</span> <input id="guests" type="number" min="1" max="99" step="1" placeholder="—"></label></div>
+<label><span data-t="guests">Voyageurs</span> <select id="guests"><option value="">Tous</option></select></label></div>
 <p id="filter-status" role="status"></p><div id="offers"></div>
 <noscript>Activez JavaScript pour consulter les offres. Enable JavaScript to view the listings.</noscript>
 </section>
 <section id="detail" class="shell section" hidden tabindex="-1"></section>
-<section id="legal" class="shell section"></section>
+<section id="contact" class="shell section" tabindex="-1" hidden></section>
+<section id="terms" class="shell section" tabindex="-1" hidden></section>
+<section id="legal" class="shell section" tabindex="-1" hidden></section>
 </main>
-<footer class="shell"><a class="brand" href="./">La Plagne Stay</a><a href="#legal" data-t="legal">CGV, mentions légales et confidentialité</a></footer>
+<footer class="shell"><a class="brand" href="./">La Plagne Stay</a><nav><a href="#contact" data-t="contact">Contact</a><a href="#terms" data-t="terms">CGV</a><a href="#legal" data-t="legal">Mentions légales</a></nav></footer>
 </body>
 </html>

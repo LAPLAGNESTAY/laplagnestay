@@ -72,10 +72,9 @@ export function snapshot(feeds, now = new Date()) {
   const parts = Object.fromEntries(paris.formatToParts(now).map(({ type, value }) => [type, value]));
   const from = [parts.year, parts.month, parts.day].join("-");
   const until = dateKey(new Date(Date.parse(from) + 365 * DAY));
-  const aspen = offers.filter(offer => offer.residence === "aspen").flatMap(offer => feeds[offer.id]);
   return {
-    updatedAt: now.toISOString(), from, until,
-    offers: Object.fromEntries(offers.map(offer => [offer.id, union(offer.residence === "aspen" ? aspen : feeds[offer.id], from, until)]))
+    version: 2, updatedAt: now.toISOString(), from, until,
+    offers: Object.fromEntries(offers.map(offer => [offer.id, union(feeds[offer.id], from, until)]))
   };
 }
 

@@ -1,10 +1,13 @@
-import { offers, residences, bookingEmail, legalApproved, availabilityUrl } from "./config.js";
+import { offers, residences, bookingEmail, legalApproved, availabilityUrl } from "./config.js?v=2";
 
 const translations = {
   hero: ["Votre séjour à La Plagne", "Your stay in La Plagne"],
   intro: ["Deux résidences. Studios, appartement entier et chambres en colocation.", "Two residences. Studios, an entire apartment and rooms in shared accommodation."],
   browse: ["Voir les logements", "Browse accommodation"], residences: ["Résidences", "Residences"],
-  guests: ["Voyageurs", "Guests"], legal: ["CGV, mentions légales et confidentialité", "Terms, legal notice and privacy"]
+  guests: ["Voyageurs", "Guests"], legal: ["Mentions légales", "Legal notice"],
+  terms: ["CGV", "Terms"], contact: ["Contact", "Contact"],
+  saving: ["−10 % par rapport au tarif Airbnb", "10% below the Airbnb price"],
+  comparison: ["En direct, pour le même logement, les mêmes dates et le même nombre de voyageurs. Tarif confirmé dans le devis.", "Book direct for the same accommodation, dates and number of guests. Price confirmed in your quote."]
 };
 let lang = new URLSearchParams(location.search).get("lang") === "en" ? 1 : 0;
 let data = null;
@@ -36,18 +39,26 @@ function link(label, hash) {
   node.href = hash;
   return node;
 }
+function photo(url, item) {
+  const image = el("img", null, "photo");
+  image.src = url;
+  image.alt = item.name[lang];
+  image.loading = "lazy";
+  image.referrerPolicy = "no-referrer";
+  return image;
+}
+const listingUrl = (item) => "https://www.airbnb.fr/rooms/" + item.airbnbId;
+const capacityLabel = (item) => item.capacity + " " + tr("voyageurs", "guests");
+
 function listOffers() {
   const input = byId("guests");
-  const count = input.valueAsNumber;
-  const visible = offers.filter(item => !count || (item.capacity !== null && item.capacity >= count));
-  byId("filter-status").textContent = !input.validity.valid
-    ? tr("Saisissez un nombre entier de 1 à 99.", "Enter a whole number from 1 to 99.")
-    : !count ? "" : visible.length === 0
-    ? tr("Aucune capacité publiée ne correspond. Effacez le filtre pour voir toutes les offres.", "No published capacity matches. Clear the filter to see all listings.")
-    : offers.some(item => item.capacity === null)
-    ? tr("Les offres dont la capacité reste à renseigner sont masquées.", "Listings with unpublished capacity are hidden.") : "";
+  const choice = input.value;
+  const maximum = Math.max(...offers.map(item => item.capacity));
+  input.replaceChildren(new Option(tr("Tous", "Any"), ""), ...Array.from({ length: maximum }, (_, index) => new Option(String(index + 1), String(index + 1))));
+  input.value = choice;
+  const visible = offers.filter(item => item.capacity >= Number(choice));
+  byId("filter-status").textContent = choice ? visible.length + " " + (visible.length === 1 ? tr("offre", "listing") : tr("offres", "listings")) : "";
   byId("offers").replaceChildren();
-  if (!input.validity.valid) return;
   for (const residence of residences) {
     const items = visible.filter(item => item.residence === residence.id);
     if (!items.length) continue;
@@ -55,23 +66,15 @@ function listOffers() {
     const cards = el("div", null, "cards");
     for (const item of items) {
       const card = el("article", null, "card");
-      const capacity = item.capacity === null ? tr("Capacité à renseigner", "Capacity to be added") : item.capacity + " " + tr("voyageur(s)", "guest(s)");
-      card.append(el("div", tr("Photo à ajouter", "Photo to be added"), "photo"), el("h3", item.name[lang]), el("p", capacity, "muted"), link(tr("Fiche et calendrier", "Details and calendar"), "#" + item.id));
+      card.append(photo(item.photos[0], item), el("h3", item.name[lang]), el("p", capacityLabel(item), "muted"), link(tr("Fiche et calendrier", "Details and calendar"), "#" + item.id));
       cards.append(card);
     }
     section.append(el("h3", residence.name), cards);
     byId("offers").append(section);
   }
 }
-function conditions(item) {
-  return [
-    tr("Acompte envisagé de 50 % non remboursable. Solde un mois avant l’arrivée. Réservation tardive à régler intégralement. Modalités soumises à validation juridique.", "Proposed 50% non-refundable deposit. Balance due one month before arrival. Late bookings payable in full. Subject to legal review."),
-    tr("Caution à valider 24 h avant l’arrivée : chèque de 500 € avec attestation RC villégiature, ou Swikly " + item.swikly + " €.", "Security deposit to be validated 24 hours before arrival: €500 cheque with holiday rental liability insurance certificate, or Swikly €" + item.swikly + "."),
-    item.cleaning === null
-      ? tr("Restitution en bon état de propreté. Linge inclus.", "Leave the room and shared areas clean. Linen included.")
-      : tr("Ménage par le locataire ou option à " + item.cleaning + " €. Linge en option à 20 € par personne, à demander 48 h avant l’arrivée.", "Guest cleaning or an optional €" + item.cleaning + " cleaning service. Linen optional at €20 per person, request 48 hours before arrival.")
-  ];
-}
+const emailConfigured = /^[^\s@?&#]+@[^\s@?&#]+\.[^\s@?&#]+$/.test(bookingEmail);
+
 function status(day) {
   const stamp = Date.parse(data?.updatedAt);
   const ranges = data?.offers?.[offer.id];
@@ -136,7 +139,7 @@ function calendar(panel) {
     el("p", tr("Les nuits sans blocage signalé restent à confirmer. Données masquées après 8 h sans mise à jour.", "Nights with no reported block still require confirmation. Data is hidden after 8 hours without a refresh."), "muted"));
 }
 function request(panel) {
-  const enabled = legalApproved && /^[^\s@?&#]+@[^\s@?&#]+\.[^\s@?&#]+$/.test(bookingEmail) && Number.isInteger(offer.capacity) && offer.capacity > 0;
+  const enabled = legalApproved && emailConfigured;
   panel.append(el("h3", tr("Demande de réservation", "Booking enquiry")),
     el("p", tr("L’hôte vérifie les dates et répond par e-mail. Aucun paiement ni confirmation automatique.", "The host checks the dates and replies by email. No payment or automatic confirmation.")));
   const form = el("form");
@@ -200,29 +203,66 @@ function detail(focus = false) {
   calendar(calendarPanel);
   request(requestPanel);
   layout.append(calendarPanel, requestPanel);
-  const terms = el("details");
-  terms.append(el("summary", tr("Conditions de séjour proposées", "Proposed stay conditions")), ...conditions(offer).map(line => el("p", line)));
+  const gallery = el("div", null, "gallery");
+  gallery.append(...offer.photos.map(url => photo(url, offer)));
   container.replaceChildren(link(tr("Retour aux résidences", "Back to residences"), "#residences"), el("h2", offer.name[lang]),
-    el("p", tr("Description, photos et tarif à renseigner.", "Description, photos and rates to be added."), "muted"), layout, terms);
+    el("p", capacityLabel(offer), "muted"), gallery, el("p", offer.description[lang]), layout,
+    link(tr("Consulter cette annonce sur Airbnb", "View this listing on Airbnb"), listingUrl(offer)));
   if (focus) { container.focus({ preventScroll: true }); container.scrollIntoView(); }
 }
 function legal() {
-  byId("legal").replaceChildren(el("h2", translations.legal[lang]), ...[
-    [tr("CGV", "Terms"), tr("Projet à valider : prix et taxes, contrat, modalités de paiement, annulations, caution et litiges. Les conditions proposées figurent dans chaque fiche.", "Draft for review: pricing and taxes, contract, payment, cancellation, security deposit and disputes. Proposed conditions appear in each listing.")],
-    [tr("Mentions légales", "Legal notice"), tr("À compléter : identité et coordonnées de l’éditeur, statut et identifiants applicables, directeur de publication et coordonnées de l’hébergeur.", "To complete: publisher identity and contact details, applicable registration information, publication director and hosting provider details.")],
-    [tr("Confidentialité", "Privacy"), tr("Projet à valider : le formulaire prépare un e-mail sur votre appareil. Le calendrier est chargé depuis GitHub. À compléter : responsable, finalités, bases légales, destinataires, durées et droits.", "Draft for review: the form prepares an email on your device. The calendar is loaded from GitHub. To complete: controller, purposes, legal bases, recipients, retention and rights.")]
-  ].map(([label, description]) => {
-    const box = el("details");
-    box.append(el("summary", label), el("p", description));
-    return box;
-  }));
+  const draft = tr("Projet à valider avant publication", "Draft for approval before publication");
+  const paragraphs = [
+    tr("La demande est examinée par l’hôte. Le devis précise le logement, les dates, le prix total, les taxes, les options et les modalités d’annulation. La réservation est confirmée par écrit après acceptation des conditions convenues.", "The host reviews the enquiry. The quote specifies the listing, dates, total price, taxes, options and cancellation terms. The booking is confirmed in writing once the agreed terms have been accepted."),
+    tr("Acompte envisagé de 50 % non remboursable, sous réserve de validation juridique et des exceptions applicables. Le solde est dû un mois avant l’arrivée. Pour une réservation dans ce délai, le règlement est intégral.", "Proposed 50% non-refundable booking deposit, subject to legal review and applicable exceptions. The balance is due one month before arrival. Bookings made within that period are payable in full."),
+    tr("Caution à valider 24 h avant l’arrivée : chèque de 500 € et attestation de responsabilité civile villégiature, ou garantie Swikly de 500 € aux Hameaux et pour les deux chambres Aspen, et de 1 000 € pour le studio Aspen et Aspen 3 chambres.", "Validate the security deposit 24 hours before arrival: a €500 cheque with holiday rental liability insurance, or a Swikly guarantee of €500 for Les Hameaux and the two Aspen rooms, and €1,000 for the Aspen studio and Aspen 3-bedroom apartment."),
+    tr("Ménage par le locataire ou option de 80 € pour les studios et 200 € pour Aspen 3 chambres. En colocation, restituer les espaces utilisés en bon état de propreté.", "Guests clean the accommodation or can choose an €80 cleaning option for either studio and €200 for Aspen 3-bedroom. Guests in shared accommodation must leave the areas they use clean."),
+    tr("Linge inclus pour les deux chambres en colocation. Pour les studios et Aspen 3 chambres, option de 20 € par personne à demander au moins 48 h avant l’arrivée.", "Linen is included for both rooms in shared accommodation. For the studios and Aspen 3-bedroom, optional linen costs €20 per person and must be requested at least 48 hours before arrival.")
+  ];
+  byId("terms").replaceChildren(el("h2", translations.terms[lang]), el("p", draft, "muted"),
+    el("h3", tr("Conditions de séjour proposées", "Proposed stay conditions")), ...paragraphs.map(value => el("p", value)));
+  byId("legal").replaceChildren(el("h2", translations.legal[lang]), el("p", draft, "muted"),
+    el("p", tr("Éditeur : La Plagne Stay · [Nom légal de l’exploitant, statut, adresse postale et coordonnées]. Directeur de la publication : [nom]. Immatriculation et enregistrement du meublé : [références applicables].", "Publisher: La Plagne Stay · [Operator’s legal name, status, postal address and contact details]. Publication director: [name]. Business and rental registration: [applicable references].")),
+    el("p", tr("Hébergeur : OVHcloud · OVH SAS, 2 rue Kellermann, 59100 Roubaix, France · coordonnées à confirmer.", "Hosting provider: OVHcloud · OVH SAS, 2 rue Kellermann, 59100 Roubaix, France · contact details to be confirmed.")),
+    el("p", tr("Réclamations et médiation : [coordonnées et modalités à compléter selon le statut de l’exploitant].", "Complaints and mediation: [contact details and procedure to be completed according to the operator’s status].")));
+}
+function contact() {
+  const section = byId("contact");
+  section.replaceChildren(el("h2", translations.contact[lang]),
+    el("p", tr("Une question sur un logement ou sur votre séjour à La Plagne ?", "Have a question about a listing or your stay in La Plagne?")));
+  if (emailConfigured) {
+    section.append(link(bookingEmail, "mailto:" + bookingEmail),
+      el("p", tr("Votre adresse et votre message servent à traiter votre demande. Pour exercer vos droits, écrivez à la même adresse.", "Your email address and message are used to handle your enquiry. To exercise your rights, write to the same address."), "muted"));
+  } else {
+    section.append(el("p", tr("Contact direct en cours de configuration. Pour joindre l’hôte, ouvrez l’annonce correspondante.", "Direct contact is being set up. To reach the host, open the relevant listing."), "muted"));
+    const links = el("ul");
+    for (const item of offers) {
+      const entry = el("li");
+      const anchor = el("a", item.name[lang] + " · Airbnb");
+      anchor.href = listingUrl(item);
+      entry.append(anchor);
+      links.append(entry);
+    }
+    section.append(links);
+  }
+}
+function route(focus = false) {
+  const page = ["contact", "terms", "legal"].find(id => "#" + id === location.hash);
+  document.querySelector(".hero").hidden = Boolean(page);
+  byId("residences").hidden = Boolean(page);
+  for (const id of ["contact", "terms", "legal"]) byId(id).hidden = id !== page;
+  detail(focus);
+  if (page && focus) {
+    byId(page).focus({ preventScroll: true });
+    byId(page).scrollIntoView();
+  }
 }
 function render() {
   document.documentElement.lang = tr("fr", "en");
   byId("language").lang = tr("en", "fr");
   byId("language").textContent = tr("English", "Français");
   for (const node of document.querySelectorAll("[data-t]")) node.textContent = translations[node.dataset.t][lang];
-  listOffers(); detail(); legal();
+  listOffers(); legal(); contact(); route();
 }
 async function refresh() {
   try {
@@ -230,7 +270,7 @@ async function refresh() {
     if (!response.ok) throw new Error();
     const payload = await response.json();
     const isDate = (value) => typeof value === "string" && /^\d{4}-\d{2}-\d{2}$/.test(value);
-    if (!payload || !isDate(payload.from) || !isDate(payload.until) || payload.until <= payload.from ||
+    if (payload?.version !== 2 || !isDate(payload.from) || !isDate(payload.until) || payload.until <= payload.from ||
         !offers.every(({ id }) => Array.isArray(payload.offers?.[id]) && payload.offers[id].every(
           range => Array.isArray(range) && range.length === 2 && range.every(isDate) && range[0] < range[1]
         ))) throw new Error();
@@ -248,9 +288,9 @@ byId("language").addEventListener("click", () => {
   history.replaceState(null, "", url);
   render();
 });
-byId("guests").addEventListener("input", listOffers);
-window.addEventListener("hashchange", () => detail(true));
+byId("guests").addEventListener("change", listOffers);
+window.addEventListener("hashchange", () => route(true));
 render();
-if (offer) detail(true);
+if (location.hash) route(true);
 void refresh();
 setInterval(refresh, 5 * 60000);
