@@ -38,4 +38,6 @@ form{display:grid;gap:.75rem}form label{display:grid;gap:.25rem}input,select{min
 .residence-map iframe{display:block;width:100%;height:230px;border:1px solid var(--line);border-radius:8px;margin-bottom:.35rem}
 .listing-actions{display:flex;gap:.75rem;flex-wrap:wrap;margin-top:1rem}
 .contact-form{max-width:40rem}
-textarea{font:inherit;width:100%;padding:.45rem;border:1px solid #6b93ae;border-radius:5px;background:white;color:var(--ink);resize:vertical}
+textarea{font:inherit;width:100%;padding:.45rem;border:1px solid #6b93ae;border-radius:5px;background:white;color:var(--ink);resize:vertical}.listing-description{max-width:74ch;margin-block:1.25rem}
+.listing-description h4{margin:1.1rem 0 .3rem}
+.listing-description p{white-space:pre-line}

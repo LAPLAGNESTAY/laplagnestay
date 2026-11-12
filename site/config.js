@@ -27,10 +27,6 @@ export const offers = [
     ],
     "capacity": 3,
     "airbnbId": "40494985",
-    "description": [
-      "Studio de 20 m² dans la résidence Les Hameaux 1, avec balcon ensoleillé côté pistes et départ skis aux pieds. Il comprend un lit de 160 × 200 cm, un futon d’appoint pour un enfant, une cuisine équipée et un espace de travail avec Wi-Fi fibre. Casier à skis, parking gratuit et accès à la piscine intérieure d’Aspen.",
-      "A 20 m² ski-in/ski-out studio at Les Hameaux 1, with a sunny balcony facing the slopes. It has a 160 × 200 cm bed, an extra futon for a child, a well-equipped kitchen and a workspace with fibre Wi-Fi. Ski locker, free parking and access to Aspen’s indoor pool."
-    ],
     "photos": [
       "https://a0.muscache.com/im/pictures/hosting/Hosting-40494985/original/2e205170-b7e0-416a-bfb4-ad730547d153.jpeg?im_w=720",
       "https://a0.muscache.com/im/pictures/hosting/Hosting-40494985/original/5fa1585f-b80d-4b4d-bfc9-759033f67208.jpeg?im_w=720",
@@ -73,10 +69,6 @@ export const offers = [
     ],
     "capacity": 2,
     "airbnbId": "1283719783651235507",
-    "description": [
-      "Grand studio près des pistes, avec séjour, cuisine, salle de bains et balcon orienté ouest. Le canapé convertible se configure en couchage double ou en deux lits simples. La résidence propose une piscine intérieure, un sauna, un hammam et un salon avec billard. Parking extérieur gratuit et casier à skis.",
-      "A spacious studio near the slopes with a living room, kitchen, bathroom and west-facing balcony. The sofa bed can be set up as a double or two singles. The residence has an indoor pool, sauna, steam room and a lounge with a pool table. Free outdoor parking and ski locker."
-    ],
     "photos": [
       "https://a0.muscache.com/im/pictures/hosting/Hosting-1283719783651235507/original/c2974238-6a69-416f-a086-67aefe73fc7a.jpeg?im_w=720",
       "https://a0.muscache.com/im/pictures/hosting/Hosting-1283719783651235507/original/5f623be0-af2f-408c-a597-b298bd312efa.jpeg?im_w=720",
@@ -104,10 +96,6 @@ export const offers = [
     ],
     "capacity": 7,
     "airbnbId": "1310801192918877769",
-    "description": [
-      "Appartement entier à Plagne Villages, avec trois chambres, deux salles de bains et un balcon orienté ouest. Les chambres comprennent un lit double, deux lits superposés et, dans la troisième chambre, deux lits superposés avec un lit tiroir. Piscine intérieure, sauna, hammam, casier à skis et parking extérieur gratuit.",
-      "An entire apartment in Plagne Villages with three bedrooms, two bathrooms and a west-facing balcony. The rooms have a double bed, a set of bunk beds, and a second set of bunks with a pull-out bed. Indoor pool, sauna, steam room, ski locker and free outdoor parking."
-    ],
     "photos": [
       "https://a0.muscache.com/im/pictures/hosting/Hosting-1283719783651235507/original/c2974238-6a69-416f-a086-67aefe73fc7a.jpeg?im_w=720",
       "https://a0.muscache.com/im/pictures/hosting/Hosting-1283719783651235507/original/5f623be0-af2f-408c-a597-b298bd312efa.jpeg?im_w=720",
@@ -133,15 +121,11 @@ export const offers = [
     "id": "coloc1-aspen",
     "residence": "aspen",
     "name": [
-      "Aspen · Chambre amis",
-      "Aspen · Friends’ room"
+      "Aspen · Chambre 1",
+      "Aspen · Room 1"
     ],
     "capacity": 2,
     "airbnbId": "1468812444818389858",
-    "description": [
-      "Chambre privée avec lit double de 160 × 200 cm et verrou. La cuisine, le salon et la salle de bains sont partagés. La résidence se trouve à environ 100 m des pistes et dispose d’une piscine chauffée, d’un sauna et d’un hammam. Casier à skis et parking extérieur gratuit.",
-      "A private lockable room with a 160 × 200 cm double bed. The kitchen, lounge and bathroom are shared. The residence is about 100 m from the slopes and has a heated pool, sauna and steam room. Ski locker and free outdoor parking."
-    ],
     "photos": [
       "https://a0.muscache.com/im/pictures/hosting/Hosting-1283719783651235507/original/c2974238-6a69-416f-a086-67aefe73fc7a.jpeg?im_w=720",
       "https://a0.muscache.com/im/pictures/hosting/Hosting-1283719783651235507/original/5f623be0-af2f-408c-a597-b298bd312efa.jpeg?im_w=720",
@@ -165,15 +149,11 @@ export const offers = [
     "id": "coloc2-aspen",
     "residence": "aspen",
     "name": [
-      "Aspen · Chambre Zéphyr",
-      "Aspen · Zéphyr room"
+      "Aspen · Chambre 2",
+      "Aspen · Room 2"
     ],
     "capacity": 2,
     "airbnbId": "1468823406738786996",
-    "description": [
-      "Chambre privée avec deux lits simples superposés, à environ 100 m des pistes. La cuisine, le salon et la salle de bains sont partagés. Piscine chauffée, sauna et hammam dans la résidence, avec parking extérieur gratuit et casier à skis.",
-      "A private room with two single bunk beds, about 100 m from the slopes. The kitchen, lounge and bathroom are shared. The residence has a heated pool, sauna and steam room, plus free outdoor parking and a ski locker."
-    ],
     "photos": [
       "https://a0.muscache.com/im/pictures/hosting/Hosting-1283719783651235507/original/c2974238-6a69-416f-a086-67aefe73fc7a.jpeg?im_w=720",
       "https://a0.muscache.com/im/pictures/hosting/Hosting-1283719783651235507/original/5f623be0-af2f-408c-a597-b298bd312efa.jpeg?im_w=720",

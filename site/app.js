@@ -1,8 +1,9 @@
-import { offers, residences, bookingEmail, availabilityUrl } from "./config.js?v=3";
+import { offers, residences, bookingEmail, availabilityUrl } from "./config.js?v=4";
+import { descriptions } from "./descriptions.js?v=4";
 
 const translations = {
   hero: ["Votre séjour à La Plagne", "Your stay in La Plagne"],
-  intro: ["Deux résidences. Studios, appartement entier et chambres en colocation.", "Two residences. Studios, an entire apartment and rooms in shared accommodation."],
+  intro: ["Deux résidences. Studios, appartement familial et chambres en colocation.", "Two residences. Studios, a family apartment and rooms in shared accommodation."],
   browse: ["Voir les logements", "Browse accommodation"], residences: ["Résidences", "Residences"],
   guests: ["Voyageurs", "Guests"], legal: ["Mentions légales", "Legal notice"],
   terms: ["CGV", "Terms"], contact: ["Contact", "Contact"],
@@ -179,8 +180,25 @@ function detail(focus = false) {
   contactLink.addEventListener("click", () => { byId("contact-listing").value = selected.id; });
   const actions = el("div", null, "listing-actions");
   actions.append(contactLink, link(tr("Consulter cette annonce sur Airbnb", "View this listing on Airbnb"), listingUrl(offer)));
+  const description = el("section", null, "listing-description");
+  description.append(el("h3", tr("À propos de ce logement", "About this place")));
+  const headings = new Set(["Le logement", "Accès des voyageurs", "Pendant votre séjour", "Autres remarques", "LINGE DE MAISON", "FOND DE TIROIR", "MÉNAGE", "The space", "Guest access", "During your stay", "Other things to note", "LINEN", "KITCHEN BASICS", "CLEANING"]);
+  for (const paragraph of descriptions[offer.id][lang].split("\n\n")) {
+    const [first, ...remaining] = paragraph.split("\n");
+    if (headings.has(first)) {
+      description.append(el("h4", first));
+      if (remaining.length) description.append(el("p", remaining.join("\n")));
+    } else {
+      description.append(el("p", paragraph));
+    }
+  }
+  const termsNote = el("p", null, "muted");
+  const termsLink = el("a", tr("Conditions des réservations directes, dont le linge et le ménage", "Direct booking terms, including linen and cleaning"));
+  termsLink.href = "#terms";
+  termsNote.append(termsLink);
+  description.append(termsNote);
   container.replaceChildren(link(tr("Retour aux résidences", "Back to residences"), "#residences"), el("h2", offer.name[lang]),
-    el("p", capacityLabel(offer), "muted"), gallery, el("p", offer.description[lang]), layout, actions);
+    el("p", capacityLabel(offer), "muted"), gallery, description, layout, actions);
   if (focus) { container.focus({ preventScroll: true }); container.scrollIntoView(); }
 }
 function legal() {
