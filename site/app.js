@@ -1,4 +1,4 @@
-import { offers, residences, bookingEmail, legalApproved, availabilityUrl } from "./config.js?v=2";
+import { offers, residences, bookingEmail, availabilityUrl } from "./config.js?v=3";
 
 const translations = {
   hero: ["Votre séjour à La Plagne", "Your stay in La Plagne"],
@@ -66,14 +66,27 @@ function listOffers() {
     const cards = el("div", null, "cards");
     for (const item of items) {
       const card = el("article", null, "card");
-      card.append(photo(item.photos[0], item), el("h3", item.name[lang]), el("p", capacityLabel(item), "muted"), link(tr("Fiche et calendrier", "Details and calendar"), "#" + item.id));
+      card.append(photo(item.cover, item), el("h3", item.name[lang]), el("p", capacityLabel(item), "muted"), link(tr("Fiche et calendrier", "Details and calendar"), "#" + item.id));
       cards.append(card);
     }
-    section.append(el("h3", residence.name), cards);
+    section.append(el("h3", residence.name), cards, residenceMap(residence));
     byId("offers").append(section);
   }
 }
-const emailConfigured = /^[^\s@?&#]+@[^\s@?&#]+\.[^\s@?&#]+$/.test(bookingEmail);
+function residenceMap(residence) {
+  const section = el("section", null, "residence-map");
+  const map = el("iframe");
+  map.src = residence.mapEmbed;
+  map.title = residence.name + " · Google Maps";
+  map.loading = "lazy";
+  map.referrerPolicy = "no-referrer";
+  const directions = el("a", tr("Ouvrir dans Google Maps", "Open in Google Maps"));
+  directions.href = residence.mapsLink;
+  directions.target = "_blank";
+  directions.rel = "noopener noreferrer";
+  section.append(map, directions);
+  return section;
+}
 
 function status(day) {
   const stamp = Date.parse(data?.updatedAt);
@@ -138,56 +151,6 @@ function calendar(panel) {
     el("p", tr("Dernière mise à jour : ", "Last updated: ") + last, "muted"),
     el("p", tr("Les nuits sans blocage signalé restent à confirmer. Données masquées après 8 h sans mise à jour.", "Nights with no reported block still require confirmation. Data is hidden after 8 hours without a refresh."), "muted"));
 }
-function request(panel) {
-  const enabled = legalApproved && emailConfigured;
-  panel.append(el("h3", tr("Demande de réservation", "Booking enquiry")),
-    el("p", tr("L’hôte vérifie les dates et répond par e-mail. Aucun paiement ni confirmation automatique.", "The host checks the dates and replies by email. No payment or automatic confirmation.")));
-  const form = el("form");
-  function field(type, label) {
-    const wrapper = el("label", label);
-    const input = el("input");
-    input.type = type;
-    input.required = true;
-    input.disabled = !enabled;
-    wrapper.append(input);
-    form.append(wrapper);
-    return input;
-  }
-  const start = field("date", tr("Arrivée", "Check-in"));
-  const end = field("date", tr("Départ", "Check-out"));
-  start.min = localDate(); end.min = localDate();
-  const guests = field("number", tr("Voyageurs", "Guests"));
-  guests.min = 1; guests.max = offer.capacity || 99; guests.step = 1;
-  const send = el("button", tr("Préparer l’e-mail", "Prepare email"));
-  send.type = "submit"; send.disabled = !enabled;
-  const feedback = el("p", enabled ? tr("Le bouton ouvre votre messagerie. Vous envoyez la demande depuis celle-ci.", "The button opens your email app. Send your enquiry from there.") : tr("Demandes en attente d’activation.", "Enquiries awaiting activation."), "muted");
-  feedback.setAttribute("role", "status");
-  form.append(send, feedback);
-  form.addEventListener("submit", (event) => {
-    event.preventDefault();
-    if (!enabled || !form.reportValidity()) return;
-    if (start.value < localDate() || end.value <= start.value) {
-      feedback.textContent = tr("Vérifiez les dates. Le départ doit suivre l’arrivée.", "Check the dates. Check-out must follow check-in.");
-      return;
-    }
-    const arrival = Date.parse(start.value);
-    const departure = Date.parse(end.value);
-    if (!Number.isFinite(arrival) || !Number.isFinite(departure) || departure - arrival > 365 * 86400000) {
-      feedback.textContent = tr("Sélectionnez un séjour de 365 nuits maximum.", "Select a stay of up to 365 nights.");
-      return;
-    }
-    for (let day = arrival; day < departure; day += 86400000) {
-      if (status(iso(new Date(day))) === "blocked") {
-        feedback.textContent = tr("Le séjour inclut une nuit bloquée. Modifiez les dates.", "Your stay includes a blocked night. Change your dates.");
-        return;
-      }
-    }
-    const title = tr("Demande La Plagne Stay", "La Plagne Stay enquiry") + " · " + offer.name[lang];
-    const body = [offer.name[lang], tr("Arrivée", "Check-in") + " : " + start.value, tr("Départ", "Check-out") + " : " + end.value, tr("Voyageurs", "Guests") + " : " + guests.value].join("\r\n");
-    location.href = "mailto:" + bookingEmail + "?subject=" + encodeURIComponent(title) + "&body=" + encodeURIComponent(body);
-  });
-  panel.append(form);
-}
 function detail(focus = false) {
   const selected = offers.find(item => "#" + item.id === location.hash);
   if (selected !== offer) month = null;
@@ -199,15 +162,25 @@ function detail(focus = false) {
   const layout = el("div", null, "detail-layout");
   const calendarPanel = el("section", null, "panel");
   calendarPanel.id = "calendar-panel";
-  const requestPanel = el("section", null, "panel");
   calendar(calendarPanel);
-  request(requestPanel);
-  layout.append(calendarPanel, requestPanel);
+  layout.append(calendarPanel);
   const gallery = el("div", null, "gallery");
-  gallery.append(...offer.photos.map(url => photo(url, offer)));
+  gallery.append(...offer.photos.map((url, index) => {
+    const imageLink = el("a");
+    imageLink.href = url.replace("im_w=720", "im_w=1200");
+    imageLink.target = "_blank";
+    imageLink.rel = "noopener noreferrer";
+    const image = photo(url, offer);
+    image.alt += " · " + tr("Photo", "Photo") + " " + (index + 1);
+    imageLink.append(image);
+    return imageLink;
+  }));
+  const contactLink = link(tr("Contacter l’hôte", "Contact the host"), "#contact");
+  contactLink.addEventListener("click", () => { byId("contact-listing").value = selected.id; });
+  const actions = el("div", null, "listing-actions");
+  actions.append(contactLink, link(tr("Consulter cette annonce sur Airbnb", "View this listing on Airbnb"), listingUrl(offer)));
   container.replaceChildren(link(tr("Retour aux résidences", "Back to residences"), "#residences"), el("h2", offer.name[lang]),
-    el("p", capacityLabel(offer), "muted"), gallery, el("p", offer.description[lang]), layout,
-    link(tr("Consulter cette annonce sur Airbnb", "View this listing on Airbnb"), listingUrl(offer)));
+    el("p", capacityLabel(offer), "muted"), gallery, el("p", offer.description[lang]), layout, actions);
   if (focus) { container.focus({ preventScroll: true }); container.scrollIntoView(); }
 }
 function legal() {
@@ -228,23 +201,53 @@ function legal() {
 }
 function contact() {
   const section = byId("contact");
-  section.replaceChildren(el("h2", translations.contact[lang]),
-    el("p", tr("Une question sur un logement ou sur votre séjour à La Plagne ?", "Have a question about a listing or your stay in La Plagne?")));
-  if (emailConfigured) {
-    section.append(link(bookingEmail, "mailto:" + bookingEmail),
-      el("p", tr("Votre adresse et votre message servent à traiter votre demande. Pour exercer vos droits, écrivez à la même adresse.", "Your email address and message are used to handle your enquiry. To exercise your rights, write to the same address."), "muted"));
-  } else {
-    section.append(el("p", tr("Contact direct en cours de configuration. Pour joindre l’hôte, ouvrez l’annonce correspondante.", "Direct contact is being set up. To reach the host, open the relevant listing."), "muted"));
-    const links = el("ul");
-    for (const item of offers) {
-      const entry = el("li");
-      const anchor = el("a", item.name[lang] + " · Airbnb");
-      anchor.href = listingUrl(item);
-      entry.append(anchor);
-      links.append(entry);
-    }
-    section.append(links);
+  const previous = Object.fromEntries(Array.from(section.querySelectorAll("[name]"), field => [field.name, field.value]));
+  const emailLink = el("a", bookingEmail);
+  emailLink.href = "mailto:" + bookingEmail;
+  const address = el("p");
+  address.append(emailLink);
+  const form = el("form", null, "contact-form");
+  function field(name, label, control) {
+    control.name = name;
+    const wrapper = el("label", label);
+    wrapper.append(control);
+    form.append(wrapper);
+    control.value = previous[name] ?? "";
+    return control;
   }
+  const nameInput = el("input");
+  nameInput.autocomplete = "name";
+  nameInput.maxLength = 100;
+  nameInput.required = true;
+  const name = field("name", tr("Votre nom", "Your name"), nameInput);
+  const emailInput = el("input");
+  emailInput.type = "email";
+  emailInput.autocomplete = "email";
+  emailInput.maxLength = 254;
+  emailInput.required = true;
+  const email = field("email", tr("Votre e-mail", "Your email"), emailInput);
+  const select = el("select");
+  select.id = "contact-listing";
+  select.append(new Option(tr("Question générale", "General enquiry"), ""), ...offers.map(item => new Option(item.name[lang], item.id)));
+  const listing = field("listing", tr("Logement", "Accommodation"), select);
+  const textarea = el("textarea");
+  textarea.rows = 6;
+  textarea.maxLength = 1000;
+  textarea.required = true;
+  const message = field("message", tr("Votre message", "Your message"), textarea);
+  const send = el("button", tr("Ouvrir ma messagerie", "Open my email app"));
+  send.type = "submit";
+  const hint = el("p", tr("Le formulaire prépare un e-mail que vous envoyez depuis votre messagerie.", "The form prepares an email for you to send from your email app."), "muted");
+  form.append(send, hint);
+  form.addEventListener("submit", event => {
+    event.preventDefault();
+    if (!form.reportValidity()) return;
+    const item = offers.find(offer => offer.id === listing.value);
+    const subject = "La Plagne Stay · " + (item?.name[lang] ?? tr("Contact", "Enquiry"));
+    const body = [tr("Nom", "Name") + " : " + name.value.trim(), tr("E-mail", "Email") + " : " + email.value.trim(), "", message.value.trim()].join("\r\n");
+    location.href = "mailto:" + bookingEmail + "?subject=" + encodeURIComponent(subject) + "&body=" + encodeURIComponent(body);
+  });
+  section.replaceChildren(el("h2", translations.contact[lang]), address, form);
 }
 function route(focus = false) {
   const page = ["contact", "terms", "legal"].find(id => "#" + id === location.hash);
