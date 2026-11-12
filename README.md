@@ -42,4 +42,4 @@ Chaque offre Aspen reprend uniquement son propre flux Airbnb. La liaison des cal
 
 ### Carte Aspen
 
-La carte utilise provisoirement la fiche Lagrange Vacances – Aspen fournie. Une fois la fiche de l’exploitant validée par Google, remplacer les deux liens Aspen dans `site/config.js`.
+Le lien et la carte intégrée Aspen pointent vers la fiche Google La Plagne Stay. Les deux URL figurent dans `site/config.js`.

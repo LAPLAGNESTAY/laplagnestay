@@ -12,8 +12,8 @@ export const residences = [
   {
     "id": "aspen",
     "name": "Aspen",
-    "mapsLink": "https://maps.app.goo.gl/NM3Lekzb5obeYUHR8",
-    "mapEmbed": "https://www.google.com/maps/embed?pb=!1m14!1m8!1m3!1d1398.0697392132895!2d6.6813203!3d45.5072708!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x47897bbb07ce1c93%3A0x31861ba77f206310!2sLagrange%20Vacances%20-%20Aspen!5e0!3m2!1sfr!2sfr!4v1794495956791!5m2!1sfr!2sfr"
+    "mapsLink": "https://maps.app.goo.gl/Hpiw6KCjiacws18T6",
+    "mapEmbed": "https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d2796.1436410814003!2d6.682249999999999!3d45.50718699999999!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x47897b163dc87e4d%3A0x48281d3ae71b1066!2sLA%20PLAGNE%20STAY!5e0!3m2!1sfr!2sfr!4v1794501666050!5m2!1sfr!2sfr"
   }
 ];
 

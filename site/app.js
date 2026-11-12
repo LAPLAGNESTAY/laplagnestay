@@ -1,4 +1,4 @@
-import { offers, residences, bookingEmail, availabilityUrl } from "./config.js?v=4";
+import { offers, residences, bookingEmail, availabilityUrl } from "./config.js?v=5";
 import { descriptions } from "./descriptions.js?v=4";
 
 const translations = {
