@@ -1,6 +1,6 @@
 export const bookingEmail = "";
 export const legalApproved = false;
-export const availabilityUrl = "https://raw.githubusercontent.com/VESTAKARE/laplagnestay/main/data/availability.json";
+export const availabilityUrl = "https://raw.githubusercontent.com/LAPLAGNESTAY/laplagnestay/main/data/availability.json";
 
 export const residences = [
   { id: "hameaux", name: "Les Hameaux de Plagne Villages" },
