@@ -1,0 +1,4 @@
+*.ics
+.env
+.env.*
+node_modules/

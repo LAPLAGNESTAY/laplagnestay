@@ -1,0 +1,36 @@
+<!doctype html>
+<html lang="fr">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="robots" content="noindex, nofollow">
+<meta name="referrer" content="no-referrer">
+<meta http-equiv="Content-Security-Policy" content="default-src 'self'; connect-src 'self' https://raw.githubusercontent.com; base-uri 'none'; object-src 'none'; form-action 'none'">
+<title>La Plagne Stay</title>
+<link rel="stylesheet" href="style.css">
+<script type="module" src="app.js"></script>
+</head>
+<body>
+<header class="top shell">
+<a class="brand" href="./">La Plagne <span>Stay</span></a>
+<nav aria-label="Navigation"><a href="#residences" data-t="residences">Résidences</a><button id="language" type="button" lang="en">English</button></nav>
+</header>
+<main>
+<section class="hero"><div class="shell">
+<p class="eyebrow">LA PLAGNE · SAVOIE</p>
+<h1 data-t="hero">Votre séjour<br>à La Plagne</h1>
+<p data-t="intro">Deux résidences. Studios, appartement entier et chambres en colocation.</p>
+<a class="primary" href="#residences" data-t="browse">Voir les logements</a>
+</div></section>
+<section id="residences" class="shell section">
+<div class="section-head"><h2 data-t="residences">Résidences</h2>
+<label><span data-t="guests">Voyageurs</span> <input id="guests" type="number" min="1" max="99" step="1" placeholder="—"></label></div>
+<p id="filter-status" role="status"></p><div id="offers"></div>
+<noscript>Activez JavaScript pour consulter les offres. Enable JavaScript to view the listings.</noscript>
+</section>
+<section id="detail" class="shell section" hidden tabindex="-1"></section>
+<section id="legal" class="shell section"></section>
+</main>
+<footer class="shell"><a class="brand" href="./">La Plagne Stay</a><a href="#legal" data-t="legal">CGV, mentions légales et confidentialité</a></footer>
+</body>
+</html>
