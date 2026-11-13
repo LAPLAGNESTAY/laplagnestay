@@ -45,3 +45,14 @@ textarea{font:inherit;width:100%;padding:.45rem;border:1px solid #6b93ae;border-
 .card-title span:first-child{font:700 .8rem/1.35 system-ui,sans-serif;letter-spacing:.09em;color:var(--blue);margin-bottom:.3rem}
 .village-intro p{max-width:72ch;margin-bottom:0}
 .hero h1{font-size:clamp(1.2rem,6vw,5.25rem)}
+
+.hero{padding-top:clamp(1.5rem,4vw,3rem)}
+.resort-logo{display:block;width:clamp(76px,10vw,125px);height:auto;margin:0 auto 1rem}
+.village-intro:not([hidden]){display:grid;grid-template-columns:1.1fr 1fr;align-items:center;gap:clamp(1.4rem,4vw,3.5rem)}
+.village-intro p+p{margin-top:.8rem}
+.village-intro img{width:100%;height:auto;display:block;border-radius:10px}
+.terms-article{max-width:80ch;padding:1rem 0;border-top:1px solid var(--line)}
+.terms-article h3{margin-bottom:.55rem}
+.terms-article ul{margin:0;padding-left:1.35rem}
+.terms-article li+li{margin-top:.45rem}
+@media(max-width:720px){.village-intro:not([hidden]){grid-template-columns:1fr}}

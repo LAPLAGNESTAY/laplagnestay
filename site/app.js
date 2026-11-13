@@ -1,10 +1,13 @@
+import { termsArticles } from "./terms.js?v=8";
 import { offers, residences, bookingEmail, availabilityUrl } from "./config.js?v=7";
 import { descriptions } from "./descriptions.js?v=4";
 
 const translations = {
   hero: ["Votre séjour Plagne Villages", "Your stay in Plagne Villages"],
   intro: ["Deux résidences. Studios, appartement familial et chambres en colocation.", "Two residences. Studios, a family apartment and rooms in shared accommodation."],
-  village: ["Plagne Villages offre un cadre paisible à environ 500 mètres de Plagne Soleil. En saison, une navette gratuite relie les deux villages et permet de rejoindre facilement les commerces, les restaurants et le spa de Plagne Soleil. Pour une ambiance plus animée, le Télébus vous emmène à Plagne Centre en environ deux minutes.","Plagne Villages is a quiet base about 500 metres from Plagne Soleil. In season, a free shuttle links the two villages, making it easy to reach Plagne Soleil’s shops, restaurants and spa. For a livelier atmosphere, take the Télébus to Plagne Centre in about two minutes."],
+  village1: ["À Plagne Villages, on profite du calme d’un village de montagne et des services du front de neige. Sur place, vous trouverez une supérette pour vos courses, des magasins de sport pour louer ou faire régler votre matériel et des restaurants pour déjeuner entre deux descentes ou dîner après le ski.","Plagne Villages combines a quiet mountain setting with the convenience of a ski village. Pick up groceries at the local supermarket, hire or adjust your equipment at a sports shop, and choose from restaurants for lunch between runs or dinner after skiing."],
+  village2: ["Les cours de ski se réservent auprès de l’ESF. La caisse des forfaits de ski se trouve en bas du front de neige, face à l’école de ski. Vous pouvez ainsi préparer votre journée sur place avant de chausser les skis.","Book ski lessons with the ESF. The lift pass office is at the foot of the snowfront, opposite the ski school, so you can get everything sorted before heading out."],
+  village3: ["À environ 500 mètres, Plagne Soleil se rejoint par la navette gratuite en saison. Vous y trouverez d’autres commerces, des restaurants et un spa. Pour une ambiance plus animée, le Télébus rejoint Plagne Centre en environ deux minutes.","Plagne Soleil is about 500 metres away and can be reached by free shuttle in season. It has more shops, restaurants and a spa. For a livelier atmosphere, the Télébus takes you to Plagne Centre in about two minutes."],
   browse: ["Voir les logements", "Browse accommodation"], residences: ["Résidences", "Residences"],
   guests: ["Voyageurs", "Guests"], legal: ["Mentions légales", "Legal notice"],
   terms: ["CGV", "Terms"], contact: ["Contact", "Contact"],
@@ -206,15 +209,14 @@ function detail(focus = false) {
 }
 function legal() {
   const draft = tr("Projet à valider avant publication", "Draft for approval before publication");
-  const paragraphs = [
-    tr("La demande est examinée par l’hôte. Le devis précise le logement, les dates, le prix total, les taxes, les options et les modalités d’annulation. La réservation est confirmée par écrit après acceptation des conditions convenues.", "The host reviews the enquiry. The quote specifies the listing, dates, total price, taxes, options and cancellation terms. The booking is confirmed in writing once the agreed terms have been accepted."),
-    tr("Acompte envisagé de 50 % non remboursable, sous réserve de validation juridique et des exceptions applicables. Le solde est dû un mois avant l’arrivée. Pour une réservation dans ce délai, le règlement est intégral.", "Proposed 50% non-refundable booking deposit, subject to legal review and applicable exceptions. The balance is due one month before arrival. Bookings made within that period are payable in full."),
-    tr("Caution à valider 24 h avant l’arrivée : chèque de 500 € et attestation de responsabilité civile villégiature, ou garantie Swikly de 500 € aux Hameaux et pour les deux chambres Aspen, et de 1 000 € pour le studio Aspen et Aspen 3 chambres.", "Validate the security deposit 24 hours before arrival: a €500 cheque with holiday rental liability insurance, or a Swikly guarantee of €500 for Les Hameaux and the two Aspen rooms, and €1,000 for the Aspen studio and Aspen 3-bedroom apartment."),
-    tr("Ménage par le locataire ou option de 80 € pour les studios et 200 € pour Aspen 3 chambres. En colocation, restituer les espaces utilisés en bon état de propreté.", "Guests clean the accommodation or can choose an €80 cleaning option for either studio and €200 for Aspen 3-bedroom. Guests in shared accommodation must leave the areas they use clean."),
-    tr("Le linge est inclus dans tous les logements Aspen. Aux Hameaux 1, il est proposé en option à 20 € par personne, à demander au moins 48 h avant l’arrivée.", "Linen is included in all Aspen accommodation. At Les Hameaux 1, optional linen costs €20 per person and must be requested at least 48 hours before arrival.")
-  ];
-  byId("terms").replaceChildren(el("h2", translations.terms[lang]), el("p", draft, "muted"),
-    el("h3", tr("Conditions de séjour proposées", "Proposed stay conditions")), ...paragraphs.map(value => el("p", value)));
+  const sections = termsArticles.map(([title, points], index) => {
+    const section = el("section", null, "terms-article");
+    const list = el("ul");
+    for (const point of points) list.append(el("li", point[lang]));
+    section.append(el("h3", "Article " + (index + 1) + " — " + title[lang]), list);
+    return section;
+  });
+  byId("terms").replaceChildren(el("h2", translations.terms[lang]), el("p", draft, "muted"), ...sections);
   byId("legal").replaceChildren(el("h2", translations.legal[lang]), el("p", draft, "muted"),
     el("p", tr("Éditeur : La Plagne Stay · [Nom légal de l’exploitant, statut, adresse postale et coordonnées]. Directeur de la publication : [nom]. Immatriculation et enregistrement du meublé : [références applicables].", "Publisher: La Plagne Stay · [Operator’s legal name, status, postal address and contact details]. Publication director: [name]. Business and rental registration: [applicable references].")),
     el("p", tr("Hébergeur : OVHcloud · OVH SAS, 2 rue Kellermann, 59100 Roubaix, France · coordonnées à confirmer.", "Hosting provider: OVHcloud · OVH SAS, 2 rue Kellermann, 59100 Roubaix, France · contact details to be confirmed.")),
