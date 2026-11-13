@@ -1,4 +1,4 @@
-import { termsArticles } from "./terms.js?v=8";
+import { termsArticles } from "./terms.js?v=9";
 import { offers, residences, bookingEmail, availabilityUrl } from "./config.js?v=7";
 import { descriptions } from "./descriptions.js?v=4";
 
@@ -152,7 +152,7 @@ function calendar(panel) {
   const stamp = Date.parse(data?.updatedAt);
   const last = Number.isFinite(stamp)
     ? new Intl.DateTimeFormat(locale(), { dateStyle: "medium", timeStyle: "short", timeZone: "Europe/Paris" }).format(stamp) + " (Paris)"
-    : tr("En attente de synchronisation", "Awaiting sync");
+    : tr("Disponibilités sur demande", "Availability on request");
   panel.replaceChildren(el("h3", tr("Disponibilités", "Availability")), controls, table,
     el("p", "○ " + labels.clear + " · × " + labels.blocked + " · · " + labels.unknown, "muted"),
     el("p", tr("Dernière mise à jour : ", "Last updated: ") + last, "muted"),
@@ -208,7 +208,6 @@ function detail(focus = false) {
   if (focus) { container.focus({ preventScroll: true }); container.scrollIntoView(); }
 }
 function legal() {
-  const draft = tr("Projet à valider avant publication", "Draft for approval before publication");
   const sections = termsArticles.map(([title, points], index) => {
     const section = el("section", null, "terms-article");
     const list = el("ul");
@@ -216,11 +215,11 @@ function legal() {
     section.append(el("h3", "Article " + (index + 1) + " — " + title[lang]), list);
     return section;
   });
-  byId("terms").replaceChildren(el("h2", translations.terms[lang]), el("p", draft, "muted"), ...sections);
-  byId("legal").replaceChildren(el("h2", translations.legal[lang]), el("p", draft, "muted"),
-    el("p", tr("Éditeur : La Plagne Stay · [Nom légal de l’exploitant, statut, adresse postale et coordonnées]. Directeur de la publication : [nom]. Immatriculation et enregistrement du meublé : [références applicables].", "Publisher: La Plagne Stay · [Operator’s legal name, status, postal address and contact details]. Publication director: [name]. Business and rental registration: [applicable references].")),
-    el("p", tr("Hébergeur : OVHcloud · OVH SAS, 2 rue Kellermann, 59100 Roubaix, France · coordonnées à confirmer.", "Hosting provider: OVHcloud · OVH SAS, 2 rue Kellermann, 59100 Roubaix, France · contact details to be confirmed.")),
-    el("p", tr("Réclamations et médiation : [coordonnées et modalités à compléter selon le statut de l’exploitant].", "Complaints and mediation: [contact details and procedure to be completed according to the operator’s status].")));
+  byId("terms").replaceChildren(el("h2", translations.terms[lang]), ...sections);
+  byId("legal").replaceChildren(el("h2", translations.legal[lang]),
+    el("p", tr("Éditrice et loueuse : Anne SEMAY, loueuse en meublé professionnelle, 80 impasse Aspen, 73210 La Plagne Tarentaise. Contact : contact@laplagnestay.fr.", "Publisher and host: Anne SEMAY, professional furnished accommodation operator, 80 impasse Aspen, 73210 La Plagne Tarentaise, France. Contact: contact@laplagnestay.fr.")),
+    el("p", tr("Hébergeur : OVHcloud · OVH SAS, 2 rue Kellermann, 59100 Roubaix, France.", "Hosting provider: OVHcloud · OVH SAS, 2 rue Kellermann, 59100 Roubaix, France · ")),
+    el("p", tr("Réclamations : contact@laplagnestay.fr.", "Complaints: contact@laplagnestay.fr.")));
 }
 function contact() {
   const section = byId("contact");

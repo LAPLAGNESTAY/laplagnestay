@@ -58,8 +58,16 @@ export const termsArticles = [
         "Please send any change or cancellation request in writing. Changes depend on availability and require both parties’ agreement."
       ],
       [
-        "Le contrat précise le sort du solde et des sommes versées en cas d’annulation, de non-présentation ou de départ anticipé, ainsi que les suites d’une annulation par le loueur. Les règles applicables, notamment en cas de force majeure, prévalent.",
-        "The contract specifies what happens to the balance and amounts paid in the event of cancellation, a no-show, early departure or cancellation by the host. Applicable rules, including those concerning force majeure, prevail."
+        "À 30 jours ou plus de l’arrivée, le loueur conserve l’acompte de 50 % et rembourse le solde s’il a déjà été payé.",
+        "If you cancel 30 days or more before arrival, the host retains the 50% advance payment and refunds any balance already paid."
+      ],
+      [
+        "À moins de 30 jours de l’arrivée, le loueur conserve la totalité du prix de la location déjà versé.",
+        "If you cancel fewer than 30 days before arrival, the host retains the full rental price already paid."
+      ],
+      [
+        "Le contrat précise les suites d’une non-présentation, d’un départ anticipé ou d’une annulation par le loueur. Les règles impératives, notamment en cas de force majeure, restent applicables.",
+        "The contract sets out the consequences of a no-show, early departure or cancellation by the host. Mandatory rules, including those on force majeure, still apply."
       ],
       [
         "Lorsque le Code de la consommation s’applique, un hébergement touristique réservé pour des dates déterminées est exclu du droit de rétractation (article L. 221-28, 12°). Les conditions d’annulation restent applicables.",
