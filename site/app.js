@@ -1,9 +1,10 @@
-import { offers, residences, bookingEmail, availabilityUrl } from "./config.js?v=6";
+import { offers, residences, bookingEmail, availabilityUrl } from "./config.js?v=7";
 import { descriptions } from "./descriptions.js?v=4";
 
 const translations = {
-  hero: ["Votre séjour à La Plagne", "Your stay in La Plagne"],
+  hero: ["Votre séjour Plagne Villages", "Your stay in Plagne Villages"],
   intro: ["Deux résidences. Studios, appartement familial et chambres en colocation.", "Two residences. Studios, a family apartment and rooms in shared accommodation."],
+  village: ["Plagne Villages offre un cadre paisible à environ 500 mètres de Plagne Soleil. En saison, une navette gratuite relie les deux villages et permet de rejoindre facilement les commerces, les restaurants et le spa de Plagne Soleil. Pour une ambiance plus animée, le Télébus vous emmène à Plagne Centre en environ deux minutes.","Plagne Villages is a quiet base about 500 metres from Plagne Soleil. In season, a free shuttle links the two villages, making it easy to reach Plagne Soleil’s shops, restaurants and spa. For a livelier atmosphere, take the Télébus to Plagne Centre in about two minutes."],
   browse: ["Voir les logements", "Browse accommodation"], residences: ["Résidences", "Residences"],
   guests: ["Voyageurs", "Guests"], legal: ["Mentions légales", "Legal notice"],
   terms: ["CGV", "Terms"], contact: ["Contact", "Contact"],
@@ -67,7 +68,9 @@ function listOffers() {
     const cards = el("div", null, "cards");
     for (const item of items) {
       const card = el("article", null, "card");
-      card.append(photo(item.cover, item), el("h3", item.name[lang]), el("p", capacityLabel(item), "muted"), link(tr("Fiche et calendrier", "Details and calendar"), "#" + item.id));
+      const title = el("h3", null, "card-title");
+      title.append(el("span", residence.id === "aspen" ? "ASPEN" : "HAMEAUX 1"), el("span", item.cardLabel[lang]));
+      card.append(photo(item.cover, item), title, el("p", capacityLabel(item), "muted"), link(tr("Fiche et calendrier", "Details and calendar"), "#" + item.id));
       cards.append(card);
     }
     section.append(el("h3", residence.name), el("p", residence.intro[lang], "residence-intro"), cards, residenceMap(residence));
@@ -270,6 +273,7 @@ function contact() {
 function route(focus = false) {
   const page = ["contact", "terms", "legal"].find(id => "#" + id === location.hash);
   document.querySelector(".hero").hidden = Boolean(page);
+  document.querySelector(".village-intro").hidden = Boolean(page);
   byId("residences").hidden = Boolean(page);
   for (const id of ["contact", "terms", "legal"]) byId(id).hidden = id !== page;
   detail(focus);
